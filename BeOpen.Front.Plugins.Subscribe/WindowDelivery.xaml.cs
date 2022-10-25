@@ -9,11 +9,9 @@ namespace BeOpen.Front.Subscribe
     /// </summary>
     public partial class WindowDelivery : Window
     {
-        public static bool IsInstanceOfWindowDelivery { get;  set; } = true;
 
         public WindowDelivery()
         {
-            IsInstanceOfWindowDelivery = false;
             InitializeComponent();
             Topmost = true;
         }

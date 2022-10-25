@@ -10,14 +10,20 @@ namespace BeOpen.Front.Subscribe
 {
     using static PluginContext;
 
+
     [UsedImplicitly]
     [PluginLicenseModuleId(21016318)]
     public sealed class SubscribePlugin : IFrontPlugin
     {
         private List<IDisposable> Subscribers { get; }
-     
+
+        private static int[] ConteinerDeliveryNumber { get; set; }
+        private static int IndexForConteinerForDeiveryNumbers { get; set; }
+
         public SubscribePlugin()
         {
+            ConteinerDeliveryNumber = new int[30];
+
             var formatJson = Formatting.None;
             var settingsJson = new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects };
 
@@ -239,19 +245,19 @@ namespace BeOpen.Front.Subscribe
                         try
                         {
                             Log.Info(obj.Entity.DeliveryStatus.ToString());
-                            
-                            var windowThread = new Thread(() =>
+
+                            if(SearchInContainer(ConteinerDeliveryNumber, obj.Entity.Number))
                             {
-                                if (WindowDelivery.IsInstanceOfWindowDelivery)
+                                AddDeliveryNumber(obj.Entity.Number);
+                                var windowThread = new Thread(() =>
                                 {
-                                    var windowDelivery = new WindowDelivery();
-                                    windowDelivery?.ShowStatus(obj.Entity.Number.ToString());
-                                }
-                                 Thread.Sleep(10000);
-                                WindowDelivery.IsInstanceOfWindowDelivery = true;
-                            });
-                            windowThread.SetApartmentState(ApartmentState.STA);
-                            windowThread.Start();
+                                     var windowDelivery = new WindowDelivery();
+                                     windowDelivery?.ShowStatus(obj.Entity.Number.ToString());
+                                     Thread.Sleep(10000);
+                                });
+                                windowThread.SetApartmentState(ApartmentState.STA);
+                                windowThread.Start();
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -639,6 +645,24 @@ namespace BeOpen.Front.Subscribe
             Log.Info(Subscribers.Count.ToString());
         }
 
+        private static void AddDeliveryNumber(int numberOfDelivery)
+        {
+            ConteinerDeliveryNumber[IndexForConteinerForDeiveryNumbers] = numberOfDelivery;
+            IndexForConteinerForDeiveryNumbers++;
+            if(IndexForConteinerForDeiveryNumbers > ConteinerDeliveryNumber.Length - 1)
+            {
+                IndexForConteinerForDeiveryNumbers = 0;
+            }
+        }
+        
+        private static bool SearchInContainer(int[] number, int NumberDeliver)
+        {
+            Array.Sort(number);
+            if (Array.BinarySearch(number, NumberDeliver) >= 0) 
+                return false;
+            return true;
+        }
+
         public void Dispose()
         {
             foreach (var x in Subscribers)
@@ -649,6 +673,3 @@ namespace BeOpen.Front.Subscribe
     }
 
 }
-
-
-
