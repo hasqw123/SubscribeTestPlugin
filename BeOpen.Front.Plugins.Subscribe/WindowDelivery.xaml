@@ -1,0 +1,12 @@
+﻿<Window x:Class="BeOpen.Front.Subscribe.WindowDelivery"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BeOpen.Front.Subscribe"
+             mc:Ignorable="d" 
+             Title="delivery status: onWay" Height="250" Width="450" Icon="{Binding}">
+    <Grid x:Name="layoutGrid">
+
+    </Grid>
+</Window>
