@@ -9,14 +9,17 @@ namespace BeOpen.Front.Subscribe
     /// </summary>
     public partial class WindowDelivery : Window
     {
+        public static bool IsInstanceOfWindowDelivery { get;  set; } = true;
+
         public WindowDelivery()
         {
+            IsInstanceOfWindowDelivery = false;
             InitializeComponent();
+            Topmost = true;
         }
 
         public void ShowStatus(string message)
         {
-            
             TextBlock info = new TextBlock();
             info.Text = $"Доставка номер {message} в пути\n {DateTime.Now}";
             info.Width = 300;

@@ -15,7 +15,7 @@ namespace BeOpen.Front.Subscribe
     public sealed class SubscribePlugin : IFrontPlugin
     {
         private List<IDisposable> Subscribers { get; }
-
+     
         public SubscribePlugin()
         {
             var formatJson = Formatting.None;
@@ -23,7 +23,6 @@ namespace BeOpen.Front.Subscribe
 
             Subscribers = new List<IDisposable>()
             {
-
                 Notifications.BeforeDeleteNonPrintedItems.Subscribe( obj =>
                 {
                     Log.Info("SubscribeBeforeDeleteNonPrintedItems");
@@ -123,7 +122,6 @@ namespace BeOpen.Front.Subscribe
 
                 Notifications.BillChequePrinting.Subscribe(obj =>
                 {
-
                     Log.Info("SubscribeBillChequePrinting");
                     Log.Info($"{obj}");
 
@@ -241,13 +239,16 @@ namespace BeOpen.Front.Subscribe
                         try
                         {
                             Log.Info(obj.Entity.DeliveryStatus.ToString());
-
+                            
                             var windowThread = new Thread(() =>
                             {
-                                 var windowStatusDelivery = new WindowDelivery();
-                                 windowStatusDelivery.Topmost = true;
-                                 windowStatusDelivery.ShowStatus(obj.Entity.Number.ToString());
+                                if (WindowDelivery.IsInstanceOfWindowDelivery)
+                                {
+                                    var windowDelivery = new WindowDelivery();
+                                    windowDelivery?.ShowStatus(obj.Entity.Number.ToString());
+                                }
                                  Thread.Sleep(10000);
+                                WindowDelivery.IsInstanceOfWindowDelivery = true;
                             });
                             windowThread.SetApartmentState(ApartmentState.STA);
                             windowThread.Start();
@@ -256,7 +257,6 @@ namespace BeOpen.Front.Subscribe
                         {
                             Log.Error(ex.ToString());
                         }
-
                     }
                 }),
 
@@ -363,7 +363,7 @@ namespace BeOpen.Front.Subscribe
 
                     Log.Info($"Vm: {JsonConvert.SerializeObject(obj.vm, formatJson, settingsJson)}");
 
-                    return new bool();
+                    return false;
                 }),
 
                 Notifications.OrderEditCardSlided.Subscribe(obj =>
@@ -379,7 +379,7 @@ namespace BeOpen.Front.Subscribe
 
                     Log.Info($"Vm: {JsonConvert.SerializeObject(obj.vm, formatJson, settingsJson)}");
 
-                    return new bool();
+                    return false;
                 }),
 
                 Notifications.OrderSplittedByCashRegisters.Subscribe(obj =>
@@ -578,7 +578,6 @@ namespace BeOpen.Front.Subscribe
                     Log.Info($"Os: {JsonConvert.SerializeObject(obj.os, formatJson, settingsJson)}");
 
                     Log.Info($"Vm: {JsonConvert.SerializeObject(obj.vm, formatJson, settingsJson)}");
-
                 }),
 
                 Notifications.StreetChanged.Subscribe(obj =>
