@@ -2,11 +2,10 @@
 using System.Windows.Controls;
 using System;
 
-
 namespace BeOpen.Front.Subscribe
 {
     /// <summary>
-    /// Созадем окно, при отправки доставки 
+    /// Create a window when sending a delivery
     /// </summary>
     public partial class WindowDelivery : Window
     {

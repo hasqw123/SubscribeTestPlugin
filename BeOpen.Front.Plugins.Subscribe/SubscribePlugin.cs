@@ -6,10 +6,6 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 
-
-
-
-
 namespace BeOpen.Front.Subscribe
 {
     using static PluginContext;
@@ -18,7 +14,6 @@ namespace BeOpen.Front.Subscribe
     [PluginLicenseModuleId(21016318)]
     public sealed class SubscribePlugin : IFrontPlugin
     {
-
         private List<IDisposable> Subscribers { get; }
 
         public SubscribePlugin()
@@ -123,7 +118,7 @@ namespace BeOpen.Front.Subscribe
 
                     Log.Info($"IsStorno: {JsonConvert.SerializeObject(obj.isStorno, formatJson, settingsJson)}");
 
-                    throw new NotImplementedException();
+                    return null;
                 }),
 
                 Notifications.BillChequePrinting.Subscribe(obj =>
@@ -134,7 +129,7 @@ namespace BeOpen.Front.Subscribe
 
                     Log.Info($"{JsonConvert.SerializeObject(obj, formatJson, settingsJson)}");
 
-                    throw new NotImplementedException();
+                    return null;
                 }),
 
                 Notifications.CafeSessionChanged.Subscribe(obj=>
@@ -172,7 +167,7 @@ namespace BeOpen.Front.Subscribe
 
                     Log.Info($"{JsonConvert.SerializeObject(obj, formatJson, settingsJson)}");
 
-                    throw new NotImplementedException();
+                    return null;
                 }),
 
                 Notifications.ChangeSumChanged.Subscribe(obj =>
@@ -368,7 +363,7 @@ namespace BeOpen.Front.Subscribe
 
                     Log.Info($"Vm: {JsonConvert.SerializeObject(obj.vm, formatJson, settingsJson)}");
 
-                    throw  new NotImplementedException();
+                    return new bool();
                 }),
 
                 Notifications.OrderEditCardSlided.Subscribe(obj =>
@@ -384,7 +379,7 @@ namespace BeOpen.Front.Subscribe
 
                     Log.Info($"Vm: {JsonConvert.SerializeObject(obj.vm, formatJson, settingsJson)}");
 
-                    throw  new NotImplementedException();
+                    return new bool();
                 }),
 
                 Notifications.OrderSplittedByCashRegisters.Subscribe(obj =>
@@ -644,7 +639,6 @@ namespace BeOpen.Front.Subscribe
             };
             Log.Info(Subscribers.Count.ToString());
         }
-
 
         public void Dispose()
         {
